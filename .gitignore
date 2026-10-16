@@ -1,0 +1,22 @@
+# ---- Hugo 构建产物(由 CI 生成, 不入库) ----
+/public/
+/resources/
+
+# ---- 本地 Hugo 二进制(CI 自带) ----
+/hugo_bin/
+/hugo.zip
+
+# ---- 迁移/下载脚本的临时缓存 ----
+.image_urls_cache.txt
+
+# ---- Python ----
+__pycache__/
+*.pyc
+
+# ---- 系统/编辑器 ----
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# 注意: static/uploads/ 下的图片是站点资源, 必须保留入库(部署时要一起发布)

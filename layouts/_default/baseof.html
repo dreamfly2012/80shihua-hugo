@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}</title>
+  <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+  <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
+  <script>
+    // 在首屏渲染前应用主题，避免深色/浅色闪烁（FOUC）
+    (function () {
+      try {
+        var t = localStorage.getItem("theme");
+        if (t !== "light" && t !== "dark") {
+          t = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+        }
+        document.documentElement.setAttribute("data-theme", t);
+      } catch (e) {}
+    })();
+  </script>
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到主内容</a>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="site-title" href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a>
+      <div class="header-right">
+        <nav class="site-nav" aria-label="主导航">
+          <a href="{{ .Site.BaseURL }}">首页</a>
+          <a href="{{ "categories/" | relURL }}">分类</a>
+          <a href="{{ "tags/" | relURL }}">标签</a>
+          <a href="{{ "about/" | relURL }}">关于</a>
+        </nav>
+        <button id="theme-toggle" class="theme-toggle" type="button"
+                aria-label="切换深色模式" title="切换深色 / 浅色模式">🌙</button>
+      </div>
+    </div>
+  </header>
+  <main id="main" class="container">
+    {{ block "main" . }}{{ end }}
+  </main>
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; {{ now.Year }} {{ .Site.Title }}. 由 Hugo 驱动.</p>
+    </div>
+  </footer>
+  <script>
+    (function () {
+      var btn = document.getElementById("theme-toggle");
+      function label(t) { btn.textContent = t === "dark" ? "☀️" : "🌙"; }
+      label(document.documentElement.getAttribute("data-theme"));
+      btn.addEventListener("click", function () {
+        var cur = document.documentElement.getAttribute("data-theme");
+        var next = cur === "dark" ? "light" : "dark";
+        document.documentElement.setAttribute("data-theme", next);
+        try { localStorage.setItem("theme", next); } catch (e) {}
+        label(next);
+      });
+    })();
+  </script>
+</body>
+</html>

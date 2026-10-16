@@ -1,0 +1,24 @@
+{{ if gt .Paginator.TotalPages 1 }}
+<nav class="pagination" aria-label="分页导航">
+  {{ if .Paginator.HasPrev }}<a class="pagination-prev" href="{{ .Paginator.Prev.URL }}">← 上一页</a>{{ end }}
+
+  {{ $cur := .Paginator.PageNumber }}
+  {{ $window := 2 }}
+  {{ $prev := 0 }}
+  {{ range .Paginator.Pagers }}
+    {{ $n := .PageNumber }}
+    {{ $near := or (le $n 1) (ge $n $.Paginator.TotalPages) (and (ge $n (sub $cur $window)) (le $n (add $cur $window))) }}
+    {{ if $near }}
+      {{ if gt $n (add $prev 1) }}<span class="pagination-gap" aria-hidden="true">…</span>{{ end }}
+      {{ if eq $n $cur }}
+        <span class="pagination-current" aria-current="page">{{ $n }}</span>
+      {{ else }}
+        <a href="{{ .URL }}">{{ $n }}</a>
+      {{ end }}
+      {{ $prev = $n }}
+    {{ end }}
+  {{ end }}
+
+  {{ if .Paginator.HasNext }}<a class="pagination-next" href="{{ .Paginator.Next.URL }}">下一页 →</a>{{ end }}
+</nav>
+{{ end }}

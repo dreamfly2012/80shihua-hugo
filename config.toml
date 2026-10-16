@@ -1,0 +1,39 @@
+baseURL = "https://www.80shihua.com/"
+locale = "zh-CN"
+title = "梦回故里"
+paginate = 10
+paginatePath = "page"
+enableEmoji = true
+
+# ---- 分类法：对齐 WordPress 的 category / tag / author ----
+# 注意：单数名用作 permalinks 键；复数名用作 front matter 字段
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+  author = "authors"
+
+# ---- 核心：永久链接 1:1 还原 WordPress ----
+# WP 固定链接基址设为 archives，所以文章/分类/标签/作者都带 /archives/ 前缀
+[permalinks]
+  posts = "/archives/:slug/"            # /archives/3445/  （:slug = 文章数字ID）
+  categories = "/archives/category/:slug/"
+  tags = "/archives/tag/:slug/"
+  authors = "/archives/author/:slug/"
+
+# 允许正文里的原始 HTML 透传（WP 内容含大量内联标签/短代码残留）
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
+  [markup.highlight]
+    noClasses = false
+
+[outputs]
+  home = ["HTML", "RSS"]
+
+# 关闭 Hugo 自带的 URL 美化（保持与 WP 一致的尾部斜杠行为）
+[urls]
+  # 保留 .RelativeURLs 由模板控制；此处不强制去斜杠
+
+[params]
+  description = "梦回故里的技术博客，分享 PHP、前端与开发实战经验。"

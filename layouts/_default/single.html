@@ -1,0 +1,21 @@
+{{ define "main" }}
+<article class="post">
+  <header class="post-header">
+    <h1 class="post-title">{{ .Title }}</h1>
+    <div class="post-meta">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">发布于 {{ .Date.Format "2006-01-02" }}</time>
+    </div>
+    {{ with .Params.categories }}<div class="taxonomy">分类：{{ range . }}<a class="pill" href="{{ "archives/category/" | relURL }}{{ . | urlize }}/">{{ . }}</a>{{ end }}</div>{{ end }}
+    {{ with .Params.tags }}<div class="taxonomy">标签：{{ range . }}<a class="pill" href="{{ "archives/tag/" | relURL }}{{ . | urlize }}/">{{ . }}</a>{{ end }}</div>{{ end }}
+  </header>
+  <div class="post-content">
+    {{ .Content }}
+  </div>
+  <footer class="post-footer">
+    <nav class="post-nav">
+      {{ with .PrevInSection }}<a class="prev" href="{{ .RelPermalink }}">← 上一篇：{{ .Title }}</a>{{ end }}
+      {{ with .NextInSection }}<a class="next" href="{{ .RelPermalink }}">下一篇：{{ .Title }} →</a>{{ end }}
+    </nav>
+  </footer>
+</article>
+{{ end }}
