@@ -132,35 +132,51 @@ main.container { padding-top: 32px; padding-bottom: 48px; }
 .post-content th { background: var(--surface); }
 .post-content a { text-decoration: underline; }
 .post-content code {
-  font-family: var(--font-mono); font-size: .9em;
-  background: var(--surface); padding: 2px 5px; border-radius: 4px;
+  font-family: var(--font-mono); font-size: .875em;
+  background: var(--surface); padding: 2px 6px; border-radius: 5px;
+  word-break: break-word;
+}
+/* 代码块：Hugo Chroma 输出结构为 .highlight > pre.chroma > code */
+.post-content .highlight {
+  margin: 1.3em 0; border: 1px solid var(--border);
+  border-radius: var(--radius); overflow: hidden; background: var(--surface);
 }
 .post-content pre {
   background: var(--surface); border: 1px solid var(--border);
   border-radius: var(--radius); padding: 14px 16px; overflow: auto;
+  font-family: var(--font-mono); font-size: .875em; line-height: 1.65;
 }
-.post-content pre code { background: none; padding: 0; }
+.post-content .highlight pre { margin: 0; border: 0; border-radius: 0; overflow: auto; }
+.post-content pre code { background: none; padding: 0; font-size: 1em; border-radius: 0; }
 
 /* 代码高亮（高对比浅色方案，色弱友好：蓝/橙/紫/灰，避开红绿单色区分） */
-.chroma { color: var(--fg); }
-.chroma .c, .chroma .c1, .chroma .cm, .chroma .cs { color: #6b7280; font-style: italic; }
-.chroma .k, .chroma .kd, .chroma .kn, .chroma .kr { color: var(--primary); font-weight: 600; }
-.chroma .s, .chroma .s1, .chroma .s2, .chroma .sx { color: #8a4b00; }
-.chroma .n, .chroma .mi, .chroma .mf { color: #6b21a8; }
+.chroma { color: var(--fg); background: transparent; }
+.chroma .line { display: block; }
+.chroma .c, .chroma .c1, .chroma .cm, .chroma .cs, .chroma .cp, .chroma .ch { color: #6b7280; font-style: italic; }
+.chroma .k, .chroma .kd, .chroma .kn, .chroma .kr, .chroma .kc, .chroma .kt { color: var(--primary); font-weight: 600; }
+.chroma .s, .chroma .s1, .chroma .s2, .chroma .sx, .chroma .sr, .chroma .sa { color: #8a4b00; }
+.chroma .n, .chroma .mi, .chroma .mf, .chroma .mh, .chroma .mo, .chroma .il { color: #6b21a8; }
 .chroma .o, .chroma .ow { color: #b45309; }
 .chroma .nf { color: #0b6b6b; }
 .chroma .nt { color: var(--primary); }
+.chroma .na { color: #0b6b6b; }
+.chroma .nc, .chroma .nn { color: #6b21a8; }
+.chroma .err { color: #9a3412; }
 
 /* 深色主题下的代码高亮 */
 [data-theme="dark"] .chroma { color: #e8eaed; }
-[data-theme="dark"] .chroma .c, [data-theme="dark"] .chroma .c1, [data-theme="dark"] .chroma .cm, [data-theme="dark"] .chroma .cs { color: #7b8494; }
-[data-theme="dark"] .chroma .k, [data-theme="dark"] .chroma .kd, [data-theme="dark"] .chroma .kn, [data-theme="dark"] .chroma .kr { color: #7db4ff; }
-[data-theme="dark"] .chroma .s, [data-theme="dark"] .chroma .s1, [data-theme="dark"] .chroma .s2, [data-theme="dark"] .chroma .sx { color: #e0a96d; }
-[data-theme="dark"] .chroma .n, [data-theme="dark"] .chroma .mi, [data-theme="dark"] .chroma .mf { color: #c79bff; }
+[data-theme="dark"] .chroma .c, [data-theme="dark"] .chroma .c1, [data-theme="dark"] .chroma .cm, [data-theme="dark"] .chroma .cs, [data-theme="dark"] .chroma .cp, [data-theme="dark"] .chroma .ch { color: #7b8494; }
+[data-theme="dark"] .chroma .k, [data-theme="dark"] .chroma .kd, [data-theme="dark"] .chroma .kn, [data-theme="dark"] .chroma .kr, [data-theme="dark"] .chroma .kc, [data-theme="dark"] .chroma .kt { color: #7db4ff; }
+[data-theme="dark"] .chroma .s, [data-theme="dark"] .chroma .s1, [data-theme="dark"] .chroma .s2, [data-theme="dark"] .chroma .sx, [data-theme="dark"] .chroma .sr, [data-theme="dark"] .chroma .sa { color: #e0a96d; }
+[data-theme="dark"] .chroma .n, [data-theme="dark"] .chroma .mi, [data-theme="dark"] .chroma .mf, [data-theme="dark"] .chroma .mh, [data-theme="dark"] .chroma .mo, [data-theme="dark"] .chroma .il { color: #c79bff; }
 [data-theme="dark"] .chroma .o, [data-theme="dark"] .chroma .ow { color: #e0944f; }
-[data-theme="dark"] .chroma .nf { color: #5fd0d0; }
+[data-theme="dark"] .chroma .nf, [data-theme="dark"] .chroma .na { color: #5fd0d0; }
 [data-theme="dark"] .chroma .nt { color: #7db4ff; }
-[data-theme="dark"] .post-content pre, [data-theme="dark"] .post-content code { background: #12151b; }
+[data-theme="dark"] .chroma .nc, [data-theme="dark"] .chroma .nn { color: #c79bff; }
+[data-theme="dark"] .chroma .err { color: #f0a98a; }
+[data-theme="dark"] .post-content .highlight, [data-theme="dark"] .post-content pre { background: #12151b; border-color: #232831; }
+[data-theme="dark"] .post-content th { background: #171a20; }
+[data-theme="dark"] .post-content blockquote { background: #171a20; }
 [data-theme="dark"] .post-content th { background: #171a20; }
 [data-theme="dark"] .post-content blockquote { background: #171a20; }
 

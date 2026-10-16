@@ -127,7 +127,7 @@ class MDConverter(HTMLParser):
             if src:
                 self.emit_text(f'![{alt}]({src})')
         elif tag == 'a':
-            self.flush_inline_marker('[')
+            self.emit_text('[')
             self.a_stack = getattr(self, 'a_stack', [])
             self.a_stack.append(ad.get('href', ''))
         elif tag in ('strong', 'b'):

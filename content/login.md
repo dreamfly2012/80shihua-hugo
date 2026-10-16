@@ -6,4 +6,4 @@ authors = ["dreamfly"]
 draft = false
 +++
 
-<p>[xh_social_page_login]</p>
+[xh_social_page_login]
