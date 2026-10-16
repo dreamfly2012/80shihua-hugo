@@ -65,6 +65,7 @@ class MDConverter(HTMLParser):
         self.rows = []
         self.row = None
         self.cell = None
+        self.holders = None  # 占位内容列表，由 clean_body 注入
 
     # ---------- helpers ----------
     def emit_text(self, s: str):
@@ -78,20 +79,28 @@ class MDConverter(HTMLParser):
     def flush(self):
         text = ''.join(self.buf).strip()
         self.buf = []
+        saved_head = self.head_prefix
+        saved_li = self.li_prefix
         self.head_prefix = ''
+        self.li_prefix = ''
         if not text:
             return
-        prefix = ''
-        indent = ''
-        if self.quote_depth:
-            prefix = '> ' * self.quote_depth
-        if self.li_prefix:
-            indent = self.li_prefix
-            self.li_prefix = ''
-            text = text.replace('\n', '\n' + ' ' * len(indent.rstrip() or indent)) if False else text
-        lines = text.split('\n')
-        body = '\n'.join((prefix + indent + l) if i == 0 else (prefix + l) for i, l in enumerate(lines))
-        self.out.append(body)
+        # 关键：先把占位符展开成真实内容（可能是多行代码块），
+        # 再对每一行统一加前缀（引用块 > 、列表项 - ）。否则多行代码块只有首行拿到前缀。
+        if self.holders:
+            text = re.sub(r'\x00H(\d+)\x00', lambda m: self.holders[int(m.group(1))], text)
+        quote_prefix = '> ' * self.quote_depth if self.quote_depth else ''
+        out_lines = []
+        for i, l in enumerate(text.split('\n')):
+            if quote_prefix:
+                l = quote_prefix + l
+            if i == 0:
+                if saved_head:
+                    l = saved_head + l
+                if saved_li:
+                    l = saved_li + l
+            out_lines.append(l)
+        self.out.append('\n'.join(out_lines))
 
     def block_boundary(self):
         self.flush()
@@ -234,29 +243,59 @@ class MDConverter(HTMLParser):
         text = re.sub(r'\n{3,}', '\n\n', text).strip('\n')
         return text
 
+# 已存在的围栏代码块（含 <?php、< 比较符等），先整块抽出保护，避免被 HTML 解析器二次破坏
+FENCE_RE = re.compile(r'```(?:[^\n]*\n)?([\s\S]*?)```', re.S)
+
 def clean_body(body: str) -> str:
-    # 1. 摘出 pre / iframe / embed
+    # 0. 先抽出已有围栏代码块，原样保护（保证脚本可重复运行 / 幂等）
     holders = []
 
     def stash(s: str) -> str:
         holders.append(s)
         return f'\x00H{len(holders)-1}\x00'
 
+    body = FENCE_RE.sub(lambda m: stash(m.group(0)), body)
+    # 1. 摘出 pre / iframe / embed
     body = PRE_RE.sub(lambda m: stash(convert_pre(m)), body)
     body = KEEP_RAW_RE.sub(lambda m: stash(m.group(1)), body)
 
-    # 2. 解析其余 HTML
+    # 2. 解析其余 HTML（holders 注入解析器，flush 时展开占位符并逐行加前缀）
     p = MDConverter()
+    p.holders = holders
     p.feed(body)
     p.close()
     text = p.result()
 
-    # 3. 放回占位内容
+    # 3. 兜底：放回仍残留的占位内容（如表格单元格内的占位）
     text = re.sub(r'\x00H(\d+)\x00', lambda m: holders[int(m.group(1))], text)
     # 清理残留空占位（如未闭合标签导致的丢失）
     text = re.sub(r'\x00H\d+\x00', '', text)
+    # 4. 转义代码块「之外」的危险原始标签（<script>/<style>/<iframe>/<?php 等）。
+    #    这些来自 WP 用 <blockquote> 包裹、且源码已 HTML 转义的代码示例；
+    #    若不转义，Goldmark 会当成真实标签执行/破坏 minify。代码块内部已由 Goldmark 自行转义，跳过。
+    text = escape_danger_outside_fences(text)
     text = re.sub(r'\n{3,}', '\n\n', text).strip('\n') + '\n'
     return text
+
+
+# 需要被转义为纯文本展示（而非执行）的危险标签 / 指令
+_DANGER = re.compile(r'</?(?:script|style|iframe|object|embed|frame|frameset|link|meta)\b|<\?php|<\?=|<\?|<!\[CDATA')
+
+def escape_danger_outside_fences(text: str) -> str:
+    parts = re.split(r'(```)', text)
+    out = []
+    in_fence = False
+    for part in parts:
+        if part == '```':
+            in_fence = not in_fence
+            out.append(part)
+            continue
+        if in_fence:
+            out.append(part)
+        else:
+            out.append(_DANGER.sub(lambda m: m.group(0).replace('<', '&lt;'), part))
+    return ''.join(out)
+
 
 SPLIT_RE = re.compile(r'^\+\+\+\s*$(.*?)^\+\+\+\s*$', re.S | re.M)
 
