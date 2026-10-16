@@ -1,0 +1,31 @@
+{{ define "main" }}
+<section class="search-page">
+  <h1 class="search-title">站内搜索</h1>
+  <p class="search-hint">输入关键词检索全站文章（基于 Pagefind 静态索引，无需后端）。</p>
+  <div id="search" class="pagefind-ui"></div>
+</section>
+<link rel="stylesheet" href="/pagefind/pagefind-ui.css">
+<script src="/pagefind/pagefind-ui.js"></script>
+<script>
+  window.addEventListener("DOMContentLoaded", function () {
+    if (typeof PagefindUI === "undefined") return;
+    new PagefindUI({
+      element: "#search",
+      showSubResults: true,
+      showImages: false,
+      translations: {
+        placeholder: "输入关键词…",
+        zero_results: "未找到包含 “[query]” 的结果",
+        clear_search: "清除",
+        load_more: "加载更多结果",
+        search_label: "搜索全站",
+        filters_label: "过滤",
+        many_results: "找到 [count] 条结果",
+        one_result: "找到 1 条结果",
+        none_results: "未找到结果",
+        navigate_label: "打开结果"
+      }
+    });
+  });
+</script>
+{{ end }}

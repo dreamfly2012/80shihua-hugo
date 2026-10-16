@@ -223,6 +223,28 @@ main.container { padding-top: 32px; padding-bottom: 48px; }
 .pagination-gap { color: var(--fg-muted); padding: 0 2px; align-self: center; }
 .pagination-prev, .pagination-next { font-weight: 600; }
 
+/* 搜索页 */
+.search-page { padding: 8px 0 24px; }
+.search-title { font-size: 24px; margin: 0 0 6px; }
+.search-hint { color: var(--fg-muted); margin: 0 0 18px; font-size: 15px; }
+
+/* Pagefind UI 主题：对齐站点配色（高对比度、色弱友好、深浅色自适应） */
+:root {
+  --pagefind-ui-scale: 0.92;
+  --pagefind-ui-primary: var(--primary);
+  --pagefind-ui-text: var(--fg);
+  --pagefind-ui-background: var(--bg);
+  --pagefind-ui-border: var(--border);
+  --pagefind-ui-tag: var(--surface-2);
+  --pagefind-ui-border-width: 1px;
+  --pagefind-ui-border-radius: var(--radius);
+  --pagefind-ui-font: var(--font-sans);
+}
+.pagefind-ui__drawer:focus-within,
+.pagefind-ui__form::after { outline-color: var(--primary); }
+.pagefind-ui__result-link { text-decoration: none; }
+.pagefind-ui__result-link:hover { text-decoration: underline; }
+
 /* 页脚 */
 .site-footer {
   border-top: 1px solid var(--border); padding: 22px 0;

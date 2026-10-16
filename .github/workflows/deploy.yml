@@ -26,6 +26,14 @@ jobs:
         env:
           HUGO_ENV: production
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Index with Pagefind
+        run: npx -y pagefind --site public
+
       - name: Deploy via rsync over SSH
         run: |
           set -e
