@@ -201,7 +201,14 @@ main.container { padding-top: 32px; padding-bottom: 48px; }
 .list-header h1 { font-size: 26px; margin: 0; }
 
 /* 分页 */
-.pagination { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-top: 28px; }
+.pagination {
+  display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  justify-content: center;          /* 宽屏下水平居中 */
+  width: 100%;
+  margin: 28px 0 0; padding: 0;
+  list-style: none;                 /* 兜底：防止 ul 渲染出圆点 */
+}
+.pagination ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .pagination a {
   display: inline-block; min-width: 38px; text-align: center; padding: 7px 12px;
   border: 1px solid var(--border); border-radius: var(--radius);

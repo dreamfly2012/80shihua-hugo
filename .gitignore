@@ -22,4 +22,10 @@ Thumbs.db
 .idea/
 .vscode/
 
+# ---- 本地环境专属配置(各人不同, 不入库; 生产构建默认不读取) ----
+config.local.toml
+
+# ---- WorkBuddy 项目数据(非缓存, 但属本地工作目录, 不入库) ----
+.workbuddy/
+
 # 注意: static/uploads/ 下的图片是站点资源, 必须保留入库(部署时要一起发布)
