@@ -223,6 +223,30 @@ main.container { padding-top: 32px; padding-bottom: 48px; }
 }
 .site-footer p { margin: 0; }
 
+/* 缺失图片占位（源站已删除/外链失效，按内容补全说明） */
+.img-missing {
+  margin: 1.4em 0;
+  padding: 1.4rem 1rem;
+  border: 2px dashed var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--fg-muted);
+  text-align: center;
+  line-height: 1.5;
+}
+.img-missing .im-label {
+  display: block;
+  font-weight: 700;
+  color: var(--primary);
+  letter-spacing: .04em;
+  margin-bottom: .4rem;
+}
+.img-missing .im-desc {
+  display: block;
+  font-size: .92rem;
+  word-break: break-word;
+}
+
 /* 响应式 */
 @media (max-width: 600px) {
   body { font-size: 17px; }

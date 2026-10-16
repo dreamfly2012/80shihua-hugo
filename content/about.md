@@ -28,4 +28,4 @@ draft = false
 
 或者去看看他所看过的电影[http://movie.80shihua.com](http://movie.80shihua.com)
 
-![qrcode_for_gh_ca4dd7752bec_344.jpg/](/ueditor/php/upload/image/20200210/1581340682826736.jpg)
+![qrcode_for_gh_ca4dd7752bec_344.jpg/](/uploads/ueditor/php/upload/image/20200210/1581340682826736.jpg)

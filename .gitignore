@@ -8,6 +8,9 @@
 
 # ---- 迁移/下载脚本的临时缓存 ----
 .image_urls_cache.txt
+.ueditor_urls_cache.txt
+image_scan.log
+image_scan_report.json
 
 # ---- Python ----
 __pycache__/
