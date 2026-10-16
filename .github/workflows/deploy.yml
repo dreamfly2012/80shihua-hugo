@@ -29,7 +29,7 @@ jobs:
       - name: Add SSH host key
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
+          ssh-keyscan -p 99 -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
       - name: Rsync to VPS
         uses: burnett01/rsync-deployments@7.0.1
@@ -38,5 +38,6 @@ jobs:
           path: "public/"
           remote_path: ${{ secrets.DEPLOY_PATH }}
           remote_host: ${{ secrets.SSH_HOST }}
+          remote_port: '99'
           remote_user: ${{ secrets.SSH_USER }}
           remote_key: ${{ secrets.SSH_KEY }}
