@@ -1,0 +1,60 @@
+[25/210] gen=5 skip=0 fail=0 (103s, ~760s left)
+FAILED 1384
+FAILED 1475
+FAILED 1541
+FAILED 1583
+FAILED 1631
+FAILED 1653
+FAILED 167
+FAILED 1729
+[50/210] gen=17 skip=0 fail=8 (443s, ~1417s left)
+FAILED 1857
+FAILED 187
+FAILED 1887
+[75/210] gen=28 skip=0 fail=11 (697s, ~1254s left)
+FAILED 206
+FAILED 2077
+FAILED 2080
+FAILED 2093
+FAILED 2103
+FAILED 2111
+FAILED 2237
+[100/210] gen=41 skip=0 fail=18 (1052s, ~1157s left)
+FAILED 2257
+FAILED 2277
+FAILED 2289
+FAILED 2314
+[25/210] gen=0 skip=0 fail=0 (0s, ~185s left)
+FAILED 1541
+FAILED 1653
+[50/210] gen=6 skip=0 fail=2 (164s, ~523s left)
+[75/210] gen=9 skip=0 fail=2 (221s, ~398s left)
+FAILED 2080
+FAILED 2103
+FAILED 2237
+[100/210] gen=13 skip=0 fail=5 (347s, ~382s left)
+FAILED 2289
+FAILED 2314
+FAILED 2524
+[125/210] gen=22 skip=0 fail=8 (569s, ~387s left)
+FAILED 2763
+FAILED 2799
+FAILED 2803
+[150/210] gen=38 skip=0 fail=11 (940s, ~376s left)
+FAILED 3315
+[25/210] gen=0 skip=0 fail=0 (0s, ~185s left)
+FAILED 1653
+[50/210] gen=1 skip=0 fail=1 (37s, ~160s left)
+[75/210] gen=1 skip=0 fail=1 (37s, ~135s left)
+FAILED 2080
+[100/210] gen=3 skip=0 fail=2 (91s, ~110s left)
+FAILED 2314
+[125/210] gen=5 skip=0 fail=3 (136s, ~92s left)
+FAILED 2799
+FAILED 2803
+[150/210] gen=6 skip=0 fail=5 (190s, ~76s left)
+[175/210] gen=9 skip=0 fail=5 (251s, ~50s left)
+FAILED 414
+FAILED 577
+[200/210] gen=22 skip=0 fail=7 (520s, ~26s left)
+DONE {'generated': 27, 'migrated': 0, 'skipped': 0, 'failed': 7, 'skip': 176} in 611s
