@@ -426,7 +426,9 @@ button:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; b
 .toc__summary::-webkit-details-marker { display: none; }
 .toc__chev { color: var(--fg-muted); font-size: 12px; transition: transform .2s; }
 .toc[open] .toc__chev { transform: rotate(180deg); }
+.post-toc--auto { display: none; }
 .toc__body { padding: 6px 12px 14px; }
+.toc__body:empty { display: none; }
 .toc__body ul { list-style: none; margin: 0; padding: 0; }
 .toc__body ul ul { margin: 2px 0 2px 10px; padding-left: 10px; border-left: 1px solid var(--border); }
 .toc__body li { margin: 1px 0; }
@@ -508,7 +510,7 @@ button:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; b
 /* ============ 页脚（三栏） ============ */
 .footer-inner {
   display: grid; grid-template-columns: minmax(0, 1.7fr) repeat(2, minmax(0, 1fr));
-  gap: 30px; padding: 34px 0 24px; align-items: start;
+  gap: 30px; padding-top: 34px; padding-bottom: 24px; align-items: start;
 }
 .footer-col { display: flex; flex-direction: column; gap: 7px; }
 .footer-col--brand { gap: 10px; }
@@ -516,7 +518,7 @@ button:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; b
 .footer-title { font-family: var(--font-display); font-size: 14px; font-weight: 700; margin: 0 0 3px; letter-spacing: .04em; }
 .footer-col a { color: var(--fg-muted); font-size: 14.5px; width: fit-content; padding: 2px 0; transition: color .18s; }
 .footer-col a:hover { color: var(--primary); text-decoration: none; }
-.footer-bottom { padding: 0 0 26px; }
+.footer-bottom { padding-bottom: 26px; }
 
 /* ============ 404 ============ */
 .nf { padding: 64px 0 44px; text-align: center; }
@@ -540,9 +542,106 @@ button:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; b
 .to-top.show { opacity: 1; visibility: visible; transform: none; }
 .to-top:hover { color: var(--primary); border-color: var(--primary); }
 
-/* 进场动效 */
-.reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s ease, transform .6s ease; }
-.reveal.in { opacity: 1; transform: none; }
+/* 进场动效
+   用独立的 translate 属性而非 transform，避免覆盖卡片 hover 的 translateY；
+   transition 里显式带上 transform / box-shadow / border-color，
+   否则会被本规则整体覆盖，导致 hover 时阴影与边框是瞬变的。 */
+.reveal {
+  --d: calc(min(var(--i, 0), 6) * 55ms);
+  opacity: 0; translate: 0 18px;
+  transition:
+    opacity .55s ease var(--d),
+    translate .55s ease var(--d),
+    transform .25s ease,
+    box-shadow .25s ease,
+    border-color .25s ease;
+}
+.reveal.in { opacity: 1; translate: none; }
+
+/* 错峰入场：同屏多张卡片依次亮起，第 7 个起统一用最大延迟 */
+.grid > .card:nth-child(1), .term-grid > .term-card:nth-child(1) { --i: 0; }
+.grid > .card:nth-child(2), .term-grid > .term-card:nth-child(2) { --i: 1; }
+.grid > .card:nth-child(3), .term-grid > .term-card:nth-child(3) { --i: 2; }
+.grid > .card:nth-child(4), .term-grid > .term-card:nth-child(4) { --i: 3; }
+.grid > .card:nth-child(5), .term-grid > .term-card:nth-child(5) { --i: 4; }
+.grid > .card:nth-child(6), .term-grid > .term-card:nth-child(6) { --i: 5; }
+.grid > .card:nth-child(n+7), .term-grid > .term-card:nth-child(n+7) { --i: 6; }
+
+/* 悬停光泽扫过 */
+.card__media::after {
+  content: ""; position: absolute; inset: 0; z-index: 2; pointer-events: none;
+  background: linear-gradient(105deg, transparent 32%, rgba(255,255,255,.42) 50%, transparent 68%);
+  transform: translateX(-115%);
+  transition: transform .7s cubic-bezier(.22,.61,.36,1);
+}
+.card:hover .card__media::after { transform: translateX(115%); }
+[data-theme="dark"] .card__media::after {
+  background: linear-gradient(105deg, transparent 32%, rgba(255,255,255,.16) 50%, transparent 68%);
+}
+
+/* 图片淡入 + 加载骨架屏（仅在 JS 可用时启用，无 JS 时图片照常显示） */
+.card__img, .post-cover img, .rel-card__thumb { transition: opacity .45s ease; }
+.card__img { position: relative; z-index: 1; }
+.post-cover img { position: relative; z-index: 1; }
+.js .card__img, .js .post-cover img, .js .rel-card__thumb { opacity: 0; }
+.js .card__img.is-loaded,
+.js .post-cover img.is-loaded,
+.js .rel-card__thumb.is-loaded { opacity: 1; }
+
+@keyframes shimmer {
+  from { background-position: 180% 0; }
+  to { background-position: -80% 0; }
+}
+.js .card__media:has(.card__img:not(.is-loaded))::before,
+.js .post-cover:has(img:not(.is-loaded))::before {
+  content: ""; position: absolute; inset: 0; z-index: 0;
+  background: linear-gradient(100deg,
+    var(--surface-2) 22%,
+    color-mix(in srgb, var(--surface-2) 50%, var(--bg)) 46%,
+    var(--surface-2) 70%);
+  background-size: 220% 100%;
+  animation: shimmer 1.5s linear infinite;
+}
+.post-cover { position: relative; }
+
+/* 标题渐变缓慢流动 */
+@keyframes gradflow {
+  from { background-position: 0% 50%; }
+  to { background-position: 100% 50%; }
+}
+.hero__title, .nf__code {
+  background-size: 220% 100%;
+  animation: gradflow 9s ease-in-out infinite alternate;
+}
+
+/* 按钮点击涟漪（坐标由 JS 写入 --rx / --ry） */
+.btn { position: relative; overflow: hidden; }
+.btn::after {
+  content: ""; position: absolute; z-index: 1; pointer-events: none;
+  left: var(--rx, 50%); top: var(--ry, 50%);
+  width: 12px; height: 12px; margin: -6px 0 0 -6px; border-radius: 50%;
+  background: currentColor; opacity: 0;
+}
+.btn:active::after { animation: ripple .55s ease-out; }
+@keyframes ripple {
+  from { transform: scale(0); opacity: .32; }
+  to { transform: scale(26); opacity: 0; }
+}
+
+/* 导航下划线生长 + 当前页标记 */
+.site-nav a { position: relative; }
+.site-nav a::after {
+  content: ""; position: absolute; left: 10px; right: 10px; bottom: 3px; height: 2px;
+  border-radius: 2px; background: var(--grad);
+  transform: scaleX(0); transform-origin: left center;
+  transition: transform .28s cubic-bezier(.22,.61,.36,1);
+}
+.site-nav a:hover::after,
+.site-nav a.is-current::after { transform: scaleX(1); }
+.site-nav a.is-current { color: var(--fg); font-weight: 600; }
+
+/* 阅读进度条末端微光 */
+.read-progress { box-shadow: 0 0 10px color-mix(in srgb, var(--primary) 55%, transparent); }
 
 /* ============ 响应式 ============ */
 @media (max-width: 860px) {
@@ -557,6 +656,7 @@ button:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; b
   body { font-size: 16.5px; }
   .container, .wrap { padding: 0 16px; }
   .site-nav a { padding: 8px 9px; font-size: 14.5px; }
+  .site-nav a::after { left: 6px; right: 6px; bottom: 2px; }
   .brand__name { font-size: 17px; }
   .hero { padding: 48px 0 28px; }
   .grid { grid-template-columns: 1fr; gap: 18px; }
@@ -569,9 +669,14 @@ button:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; b
 
 @media (prefers-reduced-motion: reduce) {
   * { scroll-behavior: auto !important; }
-  .reveal { opacity: 1; transform: none; transition: none; }
+  .reveal { opacity: 1; transform: none; translate: none; transition: none; }
   .card:hover, .card--featured:hover { transform: none; }
   .card:hover .card__img { transform: none; }
   .to-top, .theme-toggle, .btn, .term-card, .post-nav a, .rel-card { transition: none; }
   .rel-card:hover, .toc__chev { transform: none; }
+  .card__media::after { display: none; }
+  .hero__title, .nf__code { animation: none; }
+  .btn:active::after { animation: none; }
+  .js .card__media:has(.card__img:not(.is-loaded))::before,
+  .js .post-cover:has(img:not(.is-loaded))::before { animation: none; }
 }

@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 430" font-family="'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="920" height="430" fill="#f7f9fc"/>
+  <text x="40" y="46" font-size="24" font-weight="700" fill="#0f172a">WSL 三代演进：从「能用」到「够快」</text>
+  <text x="40" y="74" font-size="14" fill="#64748b">每一代都是在回答开发者不同的抱怨</text>
+
+  <!-- WSL1 -->
+  <g>
+    <rect x="40" y="110" width="250" height="230" rx="14" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
+    <rect x="40" y="110" width="250" height="44" rx="14" fill="#2563eb"/>
+    <rect x="40" y="140" width="250" height="14" fill="#2563eb"/>
+    <text x="60" y="139" font-size="17" font-weight="700" fill="#ffffff">WSL 1（2016–2019）</text>
+    <text x="60" y="178" font-size="15" font-weight="700" fill="#2563eb">关键词：便利</text>
+    <text x="60" y="206" font-size="13.5" fill="#334155">· 翻译 Linux 系统调用</text>
+    <text x="60" y="230" font-size="13.5" fill="#334155">· 跑 Bash / 包管理器 / 工具链</text>
+    <text x="60" y="254" font-size="13.5" fill="#334155">· 不必换一台机器</text>
+    <text x="60" y="290" font-size="13" fill="#b45309">局限：兼容性有限，</text>
+    <text x="60" y="310" font-size="13" fill="#b45309">并非真 Linux 内核</text>
+    <text x="60" y="338" font-size="12.5" fill="#94a3b8">回答：能跑吗？</text>
+  </g>
+
+  <!-- arrow -->
+  <g stroke="#94a3b8" stroke-width="3" fill="none">
+    <path d="M300 225 L330 225"/>
+    <path d="M322 217 L332 225 L322 233" fill="#94a3b8" stroke="none"/>
+  </g>
+
+  <!-- WSL2 -->
+  <g>
+    <rect x="340" y="110" width="250" height="230" rx="14" fill="#ffffff" stroke="#4f46e5" stroke-width="2"/>
+    <rect x="340" y="110" width="250" height="44" rx="14" fill="#4f46e5"/>
+    <rect x="340" y="140" width="250" height="14" fill="#4f46e5"/>
+    <text x="360" y="139" font-size="17" font-weight="700" fill="#ffffff">WSL 2（2019–2026）</text>
+    <text x="360" y="178" font-size="15" font-weight="700" fill="#4f46e5">关键词：正确性</text>
+    <text x="360" y="206" font-size="13.5" fill="#334155">· 轻量虚拟机 + 真实内核</text>
+    <text x="360" y="230" font-size="13.5" fill="#334155">· 跑真实二进制与容器</text>
+    <text x="360" y="254" font-size="13.5" fill="#334155">· GPU 计算初步可用</text>
+    <text x="360" y="290" font-size="13" fill="#b45309">局限：虚拟化开销、</text>
+    <text x="360" y="310" font-size="13" fill="#b45309">跨边界 I/O 性能损耗</text>
+    <text x="360" y="338" font-size="12.5" fill="#94a3b8">回答：跑得对吗？</text>
+  </g>
+
+  <!-- arrow -->
+  <g stroke="#94a3b8" stroke-width="3" fill="none">
+    <path d="M600 225 L630 225"/>
+    <path d="M622 217 L632 225 L622 233" fill="#94a3b8" stroke="none"/>
+  </g>
+
+  <!-- WSL3 -->
+  <g>
+    <rect x="640" y="110" width="250" height="230" rx="14" fill="#ffffff" stroke="#7c3aed" stroke-width="2.5"/>
+    <rect x="640" y="110" width="250" height="44" rx="14" fill="#7c3aed"/>
+    <rect x="640" y="140" width="250" height="14" fill="#7c3aed"/>
+    <text x="660" y="139" font-size="17" font-weight="700" fill="#ffffff">WSL 3（2026+）</text>
+    <text x="660" y="178" font-size="15" font-weight="700" fill="#7c3aed">关键词：性能 / 归属</text>
+    <text x="660" y="206" font-size="13.5" fill="#334155">· 准虚拟化，减少中间层</text>
+    <text x="660" y="230" font-size="13.5" fill="#334155">· 直接访问 GPU / NPU</text>
+    <text x="660" y="254" font-size="13.5" fill="#334155">· 内置 Linux 容器</text>
+    <text x="660" y="290" font-size="13" fill="#15803d">目标：本地 AI / 容器</text>
+    <text x="660" y="310" font-size="13" fill="#15803d">接近无性能税</text>
+    <text x="660" y="338" font-size="12.5" fill="#94a3b8">回答：够快吗？</text>
+  </g>
+
+  <text x="40" y="392" font-size="13" fill="#475569">趋势：与「裸机 Linux」之间的差距被逐步收窄——Linux 桌面从「逃生通道」变成「实现细节」。</text>
+</svg>

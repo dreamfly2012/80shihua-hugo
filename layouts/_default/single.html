@@ -9,16 +9,14 @@
 {{ if ge $wc 1000 }}{{ $wcs = printf "%.1fk" (div (float $wc) 1000.0) }}{{ end }}
 
 <div class="post-layout{{ if $hasToc }} has-toc{{ end }}">
-{{ if $hasToc }}
-  <aside class="post-toc" aria-label="文章目录">
+  <aside class="post-toc{{ if not $hasToc }} post-toc--auto{{ end }}" aria-label="文章目录">
     <div class="post-toc__inner">
-      <details class="toc" open>
+      <details class="toc"{{ if $hasToc }} open{{ end }}>
         <summary class="toc__summary"><span class="toc__title">本页目录</span><span class="toc__chev" aria-hidden="true">▾</span></summary>
-        <nav class="toc__body">{{ $p.TableOfContents }}</nav>
+        <nav class="toc__body">{{ if $hasToc }}{{ $p.TableOfContents }}{{ end }}</nav>
       </details>
     </div>
   </aside>
-{{ end }}
   <article class="post">
     <header class="post-hero">
       <p class="post-kicker">文章</p>

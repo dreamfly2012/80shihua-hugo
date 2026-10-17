@@ -1,0 +1,59 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 470" font-family="'Segoe UI','PingFang SC','Microsoft YaHei',sans-serif">
+  <rect width="920" height="470" fill="#f7f9fc"/>
+  <text x="40" y="46" font-size="24" font-weight="700" fill="#0f172a">WSL 的「三赢」：让每个角色都觉得自己赢了</text>
+  <text x="40" y="74" font-size="14" fill="#64748b">战略精髓：不赢下 Linux 桌面之争，而是守住「键盘下的那台机器」</text>
+
+  <!-- center -->
+  <g>
+    <rect x="360" y="200" width="200" height="78" rx="16" fill="#0f172a"/>
+    <text x="460" y="236" font-size="18" font-weight="700" fill="#ffffff" text-anchor="middle">Windows</text>
+    <text x="460" y="260" font-size="13" fill="#a5b4fc" text-anchor="middle">作为宿主保留中心地位</text>
+  </g>
+
+  <!-- developer -->
+  <g>
+    <rect x="40" y="120" width="250" height="120" rx="14" fill="#ffffff" stroke="#2563eb" stroke-width="2"/>
+    <text x="60" y="152" font-size="16" font-weight="700" fill="#2563eb">开发者</text>
+    <text x="60" y="182" font-size="13.5" fill="#334155">· 获得 Linux 工具链</text>
+    <text x="60" y="206" font-size="13.5" fill="#334155">· 不必申请换操作系统</text>
+    <text x="60" y="230" font-size="13.5" fill="#334155">· 用上 GPU / NPU 加速</text>
+  </g>
+
+  <!-- IT/Security -->
+  <g>
+    <rect x="630" y="120" width="250" height="120" rx="14" fill="#ffffff" stroke="#0d9488" stroke-width="2"/>
+    <text x="650" y="152" font-size="16" font-weight="700" fill="#0d9488">IT / 安全</text>
+    <text x="650" y="182" font-size="13.5" fill="#334155">· Windows 管理 / 身份</text>
+    <text x="650" y="206" font-size="13.5" fill="#334155">· 端点防护与策略合规</text>
+    <text x="650" y="230" font-size="13.5" fill="#334155">· Defender / Intune / Purview</text>
+  </g>
+
+  <!-- Microsoft -->
+  <g>
+    <rect x="335" y="350" width="250" height="100" rx="14" fill="#ffffff" stroke="#7c3aed" stroke-width="2"/>
+    <text x="355" y="382" font-size="16" font-weight="700" fill="#7c3aed">微软</text>
+    <text x="355" y="412" font-size="13.5" fill="#334155">· Windows 留在开发者机器中心</text>
+    <text x="355" y="436" font-size="13.5" fill="#334155">· Linux 被高频使用，却难接管桌面会话</text>
+  </g>
+
+  <!-- connectors -->
+  <g stroke="#cbd5e1" stroke-width="2" fill="none">
+    <path d="M290 180 L360 235"/>
+    <path d="M630 180 L560 235"/>
+    <path d="M460 278 L460 350"/>
+  </g>
+
+  <!-- pincer note -->
+  <g>
+    <rect x="40" y="350" width="270" height="100" rx="14" fill="#fff7ed" stroke="#f59e0b" stroke-width="2"/>
+    <text x="60" y="380" font-size="14" font-weight="700" fill="#b45309">钳形攻势</text>
+    <text x="60" y="406" font-size="12.5" fill="#334155">WSL → Linux 优先开发者</text>
+    <text x="60" y="428" font-size="12.5" fill="#334155">Windows AI API → 应用开发者</text>
+  </g>
+  <g>
+    <rect x="630" y="350" width="250" height="100" rx="14" fill="#eef2ff" stroke="#6366f1" stroke-width="2"/>
+    <text x="650" y="380" font-size="14" font-weight="700" fill="#4338ca">企业视角</text>
+    <text x="650" y="406" font-size="12.5" fill="#334155">本地 AI + Linux 重负载</text>
+    <text x="650" y="428" font-size="12.5" fill="#334155">可治理、不外溢风险</text>
+  </g>
+</svg>
