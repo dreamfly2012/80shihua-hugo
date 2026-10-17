@@ -23,7 +23,8 @@ Thumbs.db
 .vscode/
 
 # ---- 本地环境专属配置(各人不同, 不入库; 生产构建默认不读取) ----
-config.local.toml
+# 目录化后: 共享基础配置在 config/_default/(入库); 本地覆盖在 config/local/(不入库)
+config/local/
 
 # ---- WorkBuddy 项目数据(非缓存, 但属本地工作目录, 不入库) ----
 .workbuddy/
