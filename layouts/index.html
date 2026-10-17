@@ -1,18 +1,31 @@
 {{ define "main" }}
-<section class="intro">
-  <h1 class="site-name">{{ .Site.Title }}</h1>
-  {{ with .Site.Params.description }}<p class="intro-desc">{{ . }}</p>{{ end }}
-</section>
-<section class="post-list">
-  {{ range .Paginator.Pages }}
-  <article class="post-card">
-    <h2 class="post-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></h2>
-    <div class="post-meta">
-      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "2006-01-02" }}</time>
-      {{ with .Params.categories }}<span class="sep">·</span>{{ range . }}<a class="cat" href="{{ "archives/category/" | relURL }}{{ . | urlize }}/">{{ . }}</a> {{ end }}{{ end }}
+<section class="hero">
+  <div class="hero__inner">
+    <p class="hero__kicker">技术博客 · 梦回故里</p>
+    <h1 class="hero__title">{{ .Site.Title }}</h1>
+    {{ with .Site.Params.description }}<p class="hero__desc">{{ . }}</p>{{ end }}
+    <div class="hero__actions">
+      <a class="btn btn--primary" href="#latest">浏览文章 ↓</a>
+      <a class="btn btn--ghost" href="{{ "search/" | relURL }}">站内搜索</a>
     </div>
-  </article>
-  {{ end }}
+  </div>
+  <div class="hero__glow" aria-hidden="true"></div>
 </section>
-{{ partial "pagination.html" . }}
+
+<section id="latest" class="section">
+  <div class="section__head">
+    <h2 class="section__title">最新文章</h2>
+    <span class="section__count">共 {{ .Paginator.TotalNumberOfElements }} 篇 · {{ .Paginator.TotalPages }} 页</span>
+  </div>
+  <div class="grid">
+    {{ range $i, $p := .Paginator.Pages }}
+      {{ if and (eq $.Paginator.PageNumber 1) (eq $i 0) }}
+        {{ partial "post-card.html" (dict "page" $p "featured" true) }}
+      {{ else }}
+        {{ partial "post-card.html" (dict "page" $p) }}
+      {{ end }}
+    {{ end }}
+  </div>
+  {{ partial "pagination.html" . }}
+</section>
 {{ end }}

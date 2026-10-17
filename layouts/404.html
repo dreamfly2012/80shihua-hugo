@@ -1,0 +1,11 @@
+{{ define "main" }}
+<section class="nf">
+  <p class="nf__code">404</p>
+  <h1 class="nf__title">这个页面走丢了</h1>
+  <p class="nf__desc">你要找的内容可能已经搬家、改了名字，或者从来没有存在过。可以试试站内搜索，或者从首页重新出发。</p>
+  <div class="nf__actions">
+    <a class="btn btn--primary" href="{{ .Site.BaseURL }}">回到首页</a>
+    <a class="btn btn--ghost" href="{{ "search/" | relURL }}">站内搜索</a>
+  </div>
+</section>
+{{ end }}

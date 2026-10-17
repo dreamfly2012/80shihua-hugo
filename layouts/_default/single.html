@@ -1,21 +1,56 @@
 {{ define "main" }}
-<article class="post">
-  <header class="post-header">
-    <h1 class="post-title">{{ .Title }}</h1>
-    <div class="post-meta">
-      <time datetime="{{ .Date.Format "2006-01-02" }}" data-pagefind-meta="date">发布于 {{ .Date.Format "2006-01-02" }}</time>
+{{ $p := . }}
+{{ $toc := printf "%s" .TableOfContents }}
+{{ $hasToc := in $toc "<li" }}
+{{ $wc := .WordCount }}
+{{ $mins := div (add $wc 299) 300 }}
+{{ if lt $mins 1 }}{{ $mins = 1 }}{{ end }}
+{{ $wcs := printf "%d" $wc }}
+{{ if ge $wc 1000 }}{{ $wcs = printf "%.1fk" (div (float $wc) 1000.0) }}{{ end }}
+
+<div class="post-layout{{ if $hasToc }} has-toc{{ end }}">
+{{ if $hasToc }}
+  <aside class="post-toc" aria-label="文章目录">
+    <div class="post-toc__inner">
+      <details class="toc" open>
+        <summary class="toc__summary"><span class="toc__title">本页目录</span><span class="toc__chev" aria-hidden="true">▾</span></summary>
+        <nav class="toc__body">{{ $p.TableOfContents }}</nav>
+      </details>
     </div>
-    {{ with .Params.categories }}<div class="taxonomy">分类：{{ range . }}<a class="pill" href="{{ "archives/category/" | relURL }}{{ . | urlize }}/" data-pagefind-filter="category" data-pagefind-meta="category">{{ . }}</a>{{ end }}</div>{{ end }}
-    {{ with .Params.tags }}<div class="taxonomy">标签：{{ range . }}<a class="pill" href="{{ "archives/tag/" | relURL }}{{ . | urlize }}/" data-pagefind-filter="tag" data-pagefind-meta="tag">{{ . }}</a>{{ end }}</div>{{ end }}
-  </header>
-  <div class="post-content" data-pagefind-body>
-    {{ .Content }}
-  </div>
-  <footer class="post-footer">
-    <nav class="post-nav">
-      {{ with .PrevInSection }}<a class="prev" href="{{ .RelPermalink }}">← 上一篇：{{ .Title }}</a>{{ end }}
-      {{ with .NextInSection }}<a class="next" href="{{ .RelPermalink }}">下一篇：{{ .Title }} →</a>{{ end }}
-    </nav>
-  </footer>
-</article>
+  </aside>
+{{ end }}
+  <article class="post">
+    <header class="post-hero">
+      <p class="post-kicker">文章</p>
+      <h1 class="post-title">{{ .Title }}</h1>
+      <div class="post-meta">
+        <time datetime="{{ .Date.Format "2006-01-02" }}" data-pagefind-meta="date">发布于 {{ .Date.Format "2006-01-02" }}</time>
+        {{ with .Params.authors }}<span class="sep">·</span><span>{{ range . }}{{ . }}{{ end }}</span>{{ end }}
+        {{ if gt $wc 0 }}<span class="post-stat" title="按每分钟 300 字估算">{{ $mins }} 分钟读完 · {{ $wcs }} 字</span>{{ end }}
+      </div>
+      {{ with .Params.categories }}<div class="taxonomy">分类：{{ range . }}<a class="pill" href="{{ "archives/category/" | relURL }}{{ . | urlize }}/" data-pagefind-filter="category" data-pagefind-meta="category">{{ . }}</a>{{ end }}</div>{{ end }}
+      {{ with .Params.tags }}<div class="taxonomy">标签：{{ range . }}<a class="pill" href="{{ "archives/tag/" | relURL }}{{ . | urlize }}/" data-pagefind-filter="tag" data-pagefind-meta="tag">{{ . }}</a>{{ end }}</div>{{ end }}
+    </header>
+    {{ with .Params.cover }}<figure class="post-cover"><img src="{{ . }}" alt="" loading="lazy"></figure>{{ end }}
+    <div class="post-divider"></div>
+    <div class="post-content" data-pagefind-body>
+      {{ .Content }}
+    </div>
+    {{ partial "related.html" (dict "page" $p) }}
+    <footer class="post-footer">
+      <nav class="post-nav">
+        {{ with .PrevInSection }}<a class="prev" href="{{ .RelPermalink }}"><span class="pn-label">← 上一篇</span><span class="pn-title">{{ .Title }}</span></a>{{ end }}
+        {{ with .NextInSection }}<a class="next" href="{{ .RelPermalink }}"><span class="pn-label">下一篇 →</span><span class="pn-title">{{ .Title }}</span></a>{{ end }}
+      </nav>
+    </footer>
+  </article>
+</div>
+{{ if $hasToc }}
+<script>
+  (function () {
+    var d = document.querySelector(".post-toc .toc");
+    if (d && window.matchMedia("(max-width: 1179px)").matches) { d.open = false; }
+  })();
+</script>
+{{ end }}
 {{ end }}

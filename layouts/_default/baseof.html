@@ -5,9 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} - {{ .Site.Title }}{{ end }}</title>
   <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ "css/style.css" | relURL }}">
   <script>
-    // 在首屏渲染前应用主题，避免深色/浅色闪烁（FOUC）
+    // 首屏前应用主题，避免深浅色闪烁（FOUC）
     (function () {
       try {
         var t = localStorage.getItem("theme");
@@ -20,10 +23,14 @@
   </script>
 </head>
 <body>
+  <div class="read-progress" id="read-progress" aria-hidden="true"></div>
   <a class="skip-link" href="#main">跳到主内容</a>
   <header class="site-header">
     <div class="container header-inner">
-      <a class="site-title" href="{{ .Site.BaseURL }}">{{ .Site.Title }}</a>
+      <a class="brand" href="{{ .Site.BaseURL }}">
+        <span class="brand__mark">梦</span>
+        <span class="brand__name">{{ .Site.Title }}</span>
+      </a>
       <div class="header-right">
         <nav class="site-nav" aria-label="主导航">
           <a href="{{ .Site.BaseURL }}">首页</a>
@@ -41,10 +48,30 @@
     {{ block "main" . }}{{ end }}
   </main>
   <footer class="site-footer">
-    <div class="container">
-      <p>&copy; {{ now.Year }} {{ .Site.Title }}. 由 Hugo 驱动.</p>
+    <div class="container footer-inner">
+      <div class="footer-col footer-col--brand">
+        <span class="footer-brand"><span class="brand__mark">梦</span>{{ .Site.Title }}</span>
+        {{ with .Site.Params.description }}<p class="footer-desc">{{ . }}</p>{{ end }}
+      </div>
+      <nav class="footer-col" aria-label="页脚导航">
+        <h2 class="footer-title">导航</h2>
+        <a href="{{ .Site.BaseURL }}">首页</a>
+        <a href="{{ "categories/" | relURL }}">分类</a>
+        <a href="{{ "tags/" | relURL }}">标签</a>
+        <a href="{{ "search/" | relURL }}">站内搜索</a>
+        <a href="{{ "about/" | relURL }}">关于我</a>
+      </nav>
+      <div class="footer-col">
+        <h2 class="footer-title">订阅</h2>
+        <a href="{{ "index.xml" | relURL }}">RSS 订阅</a>
+        <a href="{{ "search/" | relURL }}">全文检索</a>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <span class="footer-copy">&copy; {{ now.Year }} {{ .Site.Title }}. 由 Hugo 驱动.</span>
     </div>
   </footer>
+  <button class="to-top" id="to-top" type="button" aria-label="返回顶部" title="返回顶部">↑</button>
   <script>
     (function () {
       var btn = document.getElementById("theme-toggle");
@@ -57,6 +84,92 @@
         try { localStorage.setItem("theme", next); } catch (e) {}
         label(next);
       });
+
+      // 返回顶部
+      var toTop = document.getElementById("to-top");
+      toTop.addEventListener("click", function () {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      // 滚动：进度条 + 返回顶部显隐
+      var bar = document.getElementById("read-progress");
+      function onScroll() {
+        var h = document.documentElement;
+        var max = h.scrollHeight - h.clientHeight;
+        var pct = max > 0 ? (h.scrollTop || document.body.scrollTop) / max * 100 : 0;
+        bar.style.width = pct + "%";
+        toTop.classList.toggle("show", (h.scrollTop || document.body.scrollTop) > 600);
+        spy();
+      }
+      window.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+
+      // 目录高亮（scrollspy）
+      var spyLinks = [], spyTargets = [];
+      var tocEl = document.querySelector(".post-toc");
+      if (tocEl) {
+        tocEl.querySelectorAll("a[href^='#']").forEach(function (a) {
+          var id = decodeURIComponent(a.getAttribute("href").slice(1));
+          var el = document.getElementById(id);
+          if (el) { spyLinks.push(a); spyTargets.push(el); }
+        });
+      }
+      function spy() {
+        if (!spyTargets.length) return;
+        var y = (window.scrollY || document.documentElement.scrollTop) + 160;
+        var idx = -1;
+        for (var i = 0; i < spyTargets.length; i++) {
+          if (spyTargets[i].getBoundingClientRect().top + (window.scrollY || 0) <= y) idx = i;
+        }
+        for (var j = 0; j < spyLinks.length; j++) {
+          spyLinks[j].classList.toggle("is-active", j === idx);
+        }
+      }
+
+      // 代码块复制按钮
+      document.querySelectorAll(".post-content .highlight").forEach(function (block) {
+        var btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "copy-btn";
+        btn.textContent = "复制";
+        btn.setAttribute("data-pagefind-ignore", "");
+        btn.addEventListener("click", function () {
+          var src = block.querySelector("pre");
+          var text = src ? src.innerText : block.innerText;
+          var done = function () {
+            btn.textContent = "已复制";
+            btn.classList.add("is-copied");
+            setTimeout(function () {
+              btn.textContent = "复制";
+              btn.classList.remove("is-copied");
+            }, 1600);
+          };
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done, function () { btn.textContent = "失败"; });
+          } else {
+            var ta = document.createElement("textarea");
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            try { document.execCommand("copy"); done(); } catch (e) { btn.textContent = "失败"; }
+            document.body.removeChild(ta);
+          }
+        });
+        block.appendChild(btn);
+      });
+
+      // 进场动效
+      var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!reduce && "IntersectionObserver" in window) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+          });
+        }, { threshold: 0.08 });
+        document.querySelectorAll(".reveal").forEach(function (el) { io.observe(el); });
+      } else {
+        document.querySelectorAll(".reveal").forEach(function (el) { el.classList.add("in"); });
+      }
     })();
   </script>
 </body>

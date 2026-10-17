@@ -1,10 +1,14 @@
 {{ define "main" }}
-<header class="list-header">
-  <h1>{{ .Title }}</h1>
+<header class="list-head">
+  <p class="list-head__kicker">{{ .Type | humanize }}</p>
+  <h1 class="list-head__title">{{ .Title }}</h1>
 </header>
-<ul class="term-cloud">
+<div class="term-grid">
   {{ range .Data.Terms.Alphabetical }}
-  <li><a href="{{ .Page.RelPermalink }}">{{ .Page.Title }}</a> <span class="count">({{ .Count }})</span></li>
+  <a class="term-card reveal" href="{{ .Page.RelPermalink }}">
+    <span class="term-card__name">{{ .Page.Title }}</span>
+    <span class="term-card__count">{{ .Count }}</span>
+  </a>
   {{ end }}
-</ul>
+</div>
 {{ end }}

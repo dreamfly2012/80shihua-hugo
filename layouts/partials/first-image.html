@@ -1,0 +1,1 @@
+{{- $re := `src="[^"]*?(/[^\s%"]+|https?:[^\s%"]+)[^"]*` -}}{{- $matches := findRE $re .Content 1 -}}{{- if $matches -}}{{- $m := index $matches 0 -}}{{- $src := replaceRE $re "$1" $m -}}{{- if and (ne $src "") (not (hasPrefix $src "data:")) -}}{{- $src -}}{{- end -}}{{- end -}}
