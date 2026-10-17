@@ -546,6 +546,8 @@ button:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; b
 
 /* ============ 响应式 ============ */
 @media (max-width: 860px) {
+  .footer-inner { grid-template-columns: 1fr 1fr; gap: 24px; }
+  .footer-col--brand { grid-column: 1 / -1; }
   .card--featured { flex-direction: column; }
   .card--featured .card__media { min-height: 220px; }
   .card--featured .card__body { padding: 22px; }
@@ -561,6 +563,8 @@ button:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; b
   .post-nav { grid-template-columns: 1fr; }
   .post-nav .next { text-align: left; }
   .post-content { font-size: 16.5px; }
+  .footer-inner { grid-template-columns: 1fr; gap: 22px; }
+  .rel-card__thumb { width: 62px; height: 48px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -568,5 +572,6 @@ button:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; b
   .reveal { opacity: 1; transform: none; transition: none; }
   .card:hover, .card--featured:hover { transform: none; }
   .card:hover .card__img { transform: none; }
-  .to-top, .theme-toggle, .btn, .term-card, .post-nav a { transition: none; }
+  .to-top, .theme-toggle, .btn, .term-card, .post-nav a, .rel-card { transition: none; }
+  .rel-card:hover, .toc__chev { transform: none; }
 }
