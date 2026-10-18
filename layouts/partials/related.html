@@ -1,26 +1,18 @@
-{{/* 文末相关文章：优先同分类，不足 2 篇时回退到全站最新。
-     用法：{{ partial "related.html" (dict "page" .) }} */}}
 {{- $p := .page -}}
-{{- $pool := where site.RegularPages "Section" "posts" -}}
-{{- $rel := slice -}}
-{{- with $p.Params.categories -}}
-  {{- $rel = where $pool "Params.categories" "intersect" . -}}
-{{- end -}}
-{{- $rel = where $rel "Permalink" "!=" $p.Permalink -}}
-{{- if lt (len $rel) 2 -}}
-  {{- $rel = first 4 (where $pool "Permalink" "!=" $p.Permalink) -}}
-{{- else -}}
-  {{- $rel = first 4 $rel -}}
-{{- end -}}
+{{- $rel := $p.Site.RegularPages.Related $p | first 4 -}}
+
 {{- if gt (len $rel) 0 -}}
 <section class="related" aria-label="相关文章">
   <h2 class="related__head">相关文章</h2>
   <div class="related__grid">
     {{- range $rel -}}
-      {{- $img := "" -}}
-      {{- with .Params.cover -}}{{- $img = . -}}{{- else -}}{{- $img = partial "first-image.html" . -}}{{- end -}}
+      {{- $img := .Params.cover | default "" -}}
       <a class="rel-card" href="{{ .RelPermalink }}">
-        {{- if $img -}}<img class="rel-card__thumb" src="{{ $img }}" alt="" loading="lazy">{{- else -}}<span class="rel-card__thumb rel-card__thumb--ph" aria-hidden="true">{{ substr .Title 0 1 }}</span>{{- end -}}
+        {{- if $img -}}
+          <img class="rel-card__thumb" src="{{ $img }}" alt="" loading="lazy">
+        {{- else -}}
+          <span class="rel-card__thumb rel-card__thumb--ph" aria-hidden="true">{{ substr .Title 0 1 }}</span>
+        {{- end -}}
         <span class="rel-card__body">
           <span class="rel-card__title">{{ .Title }}</span>
           <span class="rel-card__date">{{ .Date.Format "2006-01-02" }}</span>

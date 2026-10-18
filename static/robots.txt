@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# 站点地图（Hugo 自动生成，含全部文章/分类/标签/页面）
+Sitemap: https://www.80shihua.com/sitemap.xml
+
+# 大模型友好索引（llms.txt 标准，Answer.AI）
+# 让 AI 爬虫直接读取站点结构与重点内容

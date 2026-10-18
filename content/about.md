@@ -4,6 +4,8 @@ date = "2014-10-29T23:33:13"
 slug = "about"
 authors = ["dreamfly"]
 draft = false
+summary = "这里它将分享它的web知识，分享它的IT技术，期待和每一个友好的人做朋友。 他表面开起来内向，实际上也是一个腼腆的人，不过这都不要紧，如果你和他熟了之后，他可以说是一个很开朗的人。 他看似超凡脱俗，骨…"
+
 +++
 
 这里它将分享它的web知识，分享它的IT技术，期待和每一个友好的人做朋友。
@@ -26,6 +28,5 @@ draft = false
 
 如果你想尽快了解他，请关注他的个人公众号-程序那些事儿。
 
-或者去看看他所看过的电影[http://movie.80shihua.com](http://movie.80shihua.com)
 
 ![qrcode_for_gh_ca4dd7752bec_344.jpg/](/uploads/ueditor/php/upload/image/20200210/1581340682826736.jpg)

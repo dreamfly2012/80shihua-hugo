@@ -1,0 +1,108 @@
+{{/*
+  seo.html — 统一输出 SEO + 社交分享(Open Graph / Twitter Card) +
+  结构化数据(JSON-LD) + AI/LLM 发现(llms.txt)。
+  在 baseof.html 的 <head> 内调用：{{ partial "seo.html" . }}
+*/}}
+
+{{/* ---------- 基础取值 ---------- */}}
+{{- $title := .Title -}}
+{{- if .IsHome }}{{ $title = .Site.Title }}{{ end -}}
+{{- $fullTitle := $title -}}
+{{- if not .IsHome }}{{ $fullTitle = printf "%s - %s" .Title .Site.Title }}{{ end -}}
+
+{{- $desc := "" -}}
+{{- if .Description -}}
+  {{- $desc = .Description -}}
+{{- else if and (eq .Kind "page") .Summary -}}
+  {{- $desc = .Summary -}}
+{{- else -}}
+  {{- $desc = .Site.Params.description -}}
+{{- end -}}
+{{- $desc = $desc | plainify | truncate 160 -}}
+
+{{/* 封面图：文章优先 cover，其次站点默认 og_image；统一转绝对地址 */}}
+{{- $img := "" -}}
+{{- with .Params.cover }}{{ $img = . | absURL }}{{ end -}}
+{{- if not $img }}{{ with .Site.Params.og_image }}{{ $img = . | absURL }}{{ end }}{{ end -}}
+
+{{- $author := .Site.Title -}}
+{{- with .Params.authors }}{{ $author = index . 0 }}{{ end -}}
+
+{{/* ---------- 标题 / 描述 / 抓取指令 ---------- */}}
+<title>{{ $fullTitle }}</title>
+<meta name="description" content="{{ $desc }}">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="theme-color" content="#0b1020" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)">
+<meta name="color-scheme" content="light dark">
+<link rel="canonical" href="{{ .Permalink }}">
+
+{{/* ---------- 发现入口：RSS / sitemap / llms.txt ---------- */}}
+<link rel="sitemap" type="application/xml" title="Sitemap" href="{{ "sitemap.xml" | absURL }}">
+<link rel="alternate" type="application/rss+xml" title="{{ .Site.Title }} RSS" href="{{ "index.xml" | absURL }}">
+<link rel="alternate" type="text/plain" href="{{ "llms.txt" | absURL }}" title="llms.txt（大模型友好索引）">
+
+{{/* ---------- Open Graph ---------- */}}
+<meta property="og:type" content="{{ if eq .Kind "page" }}article{{ else }}website{{ end }}">
+<meta property="og:site_name" content="{{ .Site.Title }}">
+<meta property="og:title" content="{{ $fullTitle }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:locale" content="zh_CN">
+{{- with $img }}<meta property="og:image" content="{{ . }}">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">{{ end }}
+{{- if eq .Kind "page" }}
+<meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+<meta property="article:modified_time" content="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}">
+{{- with (index .Params.categories 0) }}<meta property="article:section" content="{{ . }}">{{ end }}
+{{- range .Params.tags }}<meta property="article:tag" content="{{ . }}">{{ end }}
+<meta property="article:author" content="{{ $author }}">
+{{- end }}
+
+{{/* ---------- Twitter Card ---------- */}}
+<meta name="twitter:card" content="{{ if $img }}summary_large_image{{ else }}summary{{ end }}">
+<meta name="twitter:title" content="{{ $fullTitle }}">
+<meta name="twitter:description" content="{{ $desc }}">
+{{- with $img }}<meta name="twitter:image" content="{{ . }}">{{ end }}
+{{- with .Site.Params.twitter }}<meta name="twitter:site" content="@{{ . }}">{{ end }}
+
+{{/* ---------- 结构化数据 JSON-LD ---------- */}}
+{{- if .IsHome -}}
+<script type="application/ld+json">{{ dict
+  "@context" "https://schema.org"
+  "@type" "WebSite"
+  "name" .Site.Title
+  "url" .Site.BaseURL
+  "description" .Site.Params.description
+  "inLanguage" "zh-CN"
+  | jsonify | safeJS }}</script>
+{{- else if eq .Kind "page" -}}
+{{- $publisher := dict "@type" "Organization" "name" .Site.Title -}}
+{{- with .Site.Params.og_image }}{{ $publisher = merge $publisher (dict "logo" (dict "@type" "ImageObject" "url" (. | absURL))) }}{{ end -}}
+{{- $ld := dict
+  "@context" "https://schema.org"
+  "@type" "BlogPosting"
+  "headline" .Title
+  "url" .Permalink
+  "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00")
+  "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")
+  "inLanguage" "zh-CN"
+  "author" (dict "@type" "Person" "name" $author)
+  "publisher" $publisher
+  "description" $desc
+-}}
+{{- with $img }}{{ $ld = merge $ld (dict "image" (dict "@type" "ImageObject" "url" $img)) }}{{ end -}}
+{{- with (index .Params.categories 0) }}{{ $ld = merge $ld (dict "articleSection" .) }}{{ end -}}
+{{- with .Params.tags }}{{ $ld = merge $ld (dict "keywords" (delimit . ", ")) }}{{ end -}}
+<script type="application/ld+json">{{ $ld | jsonify | safeJS }}</script>
+{{- else -}}
+<script type="application/ld+json">{{ dict
+  "@context" "https://schema.org"
+  "@type" "CollectionPage"
+  "name" $fullTitle
+  "url" .Permalink
+  "description" $desc
+  "inLanguage" "zh-CN"
+  | jsonify | safeJS }}</script>
+{{- end -}}

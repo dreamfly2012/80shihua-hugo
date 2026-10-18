@@ -7,6 +7,8 @@ tags = ["wsl", "windows", "linux", "ai", "reprint"]
 authors = ["dreamfly"]
 draft = false
 cover = "/uploads/covers/wsl3-cover.png"
+summary = "在 2026 年 6 月 2 日的 Build 开发者大会上，微软把下一波 Windows Subsystem for Linux（据 ZDNET 报道被外界称为 WSL 3 ）摆到了台前。它的卖点很…"
+
 +++
 
 ![WSL 3：Windows 与 Linux 的融合](/uploads/covers/wsl3-cover.png)

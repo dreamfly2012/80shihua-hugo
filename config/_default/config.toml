@@ -28,8 +28,15 @@ enableEmoji = true
   [markup.highlight]
     noClasses = false
 
+# llms.txt：面向大模型的站点索引（根目录 llms.txt）
+[outputFormats.llms]
+  baseName = "llms"
+  isPlainText = true
+  mediaType = "text/plain"
+  rel = "alternate"
+
 [outputs]
-  home = ["HTML", "RSS"]
+  home = ["HTML", "RSS", "llms"]
 
 # 关闭 Hugo 自带的 URL 美化（保持与 WP 一致的尾部斜杠行为）
 [urls]
@@ -37,3 +44,17 @@ enableEmoji = true
 
 [params]
   description = "梦回故里的技术博客，分享 PHP、前端与开发实战经验。"
+
+[related]
+  includeNewer = true
+  threshold = 0
+  toLower = true
+  [[related.indices]]
+    name = "categories"
+    weight = 100
+  [[related.indices]]
+    name = "tags"
+    weight = 50
+  [[related.indices]]
+    name = "date"
+    weight = 10

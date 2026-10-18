@@ -1,0 +1,30 @@
+# {{ .Site.Title }}
+
+> {{ .Site.Params.description }}
+
+本文件为「大模型友好索引」（llms.txt）。它用纯文本 summarises 本站结构与重点内容，便于 AI 助手检索与引用。完整、可机器读取的页面清单见文末的 sitemap.xml 与 RSS(index.xml)。
+
+## 站点导航
+- [首页]({{ .Site.BaseURL }})
+- [全部分类]({{ "categories/" | absURL }})
+- [全部标签]({{ "tags/" | absURL }})
+- [关于]({{ "about/" | absURL }})
+- [站内搜索]({{ "search/" | absURL }})
+- [RSS 订阅]({{ "index.xml" | absURL }})
+- [站点地图(sitemap.xml)]({{ "sitemap.xml" | absURL }})
+
+## 分类
+{{- range .Site.Taxonomies.categories.Alphabetical }}
+- [{{ .Page.Title }}]({{ .Page.Permalink }})（{{ .Count }} 篇）
+{{- end }}
+
+## 最新文章（前 50 篇）
+{{- $posts := .Site.RegularPages.ByDate.Reverse | first 50 }}
+{{- range $posts }}
+- [{{ .Title }}]({{ .Permalink }})：发布于 {{ .Date.Format "2006-01-02" }}
+{{- end }}
+
+## 如何获取全站内容
+- 完整 URL 清单：{{ "sitemap.xml" | absURL }}（XML，含全部文章/分类/标签/页面）
+- 增量更新流：{{ "index.xml" | absURL }}（RSS 2.0）
+- 本站为静态站点，每篇文章均为独立可抓取页面，正文以语义化 HTML 呈现，可直接被检索与引用。

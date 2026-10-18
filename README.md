@@ -65,4 +65,9 @@ hugo --gc
 - **搜索**：静态站用 Pagefind（构建后索引，零后端）。
 - **图片**：正文图片目前仍指向 `www.80shihua.com` 原域名。可后续批量下载到 `static/uploads/` 并改写链接，实现完全自托管。
 - **RSS / sitemap**：Hugo 原生输出 `index.xml`、`sitemap.xml`。
+- **SEO / AI 索引（已落地）**：
+  - `layouts/partials/seo.html` 统一输出：canonical、robots 抓取指令、Open Graph、Twitter Card，以及 JSON-LD 结构化数据（首页 WebSite / 文章 BlogPosting / 列表 CollectionPage）。
+  - `static/robots.txt`：允许抓取并指向 `sitemap.xml`。
+  - `llms.txt`（根目录，由 `config/_default/config.toml` 的 `[outputFormats.llms]` + `layouts/_default/index.llms.txt` 生成）：面向大模型的站点索引，含分类、最新 50 篇与 sitemap/RSS 指引，便于 AI 助手检索引用。
+  - `<head>` 内通过 `<link rel="alternate" type="text/plain" href="/llms.txt">` 主动暴露给 AI 爬虫。
 - **模板美化**：当前为最小可用模板，可按设计稿替换 `layouts/`。

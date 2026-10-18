@@ -1,9 +1,11 @@
 {{/* 图文卡片：封面图（首图或渐变占位）+ 分类角标 + 标题 + 元信息 + 摘要。
-     用法：{{ partial "post-card.html" (dict "page" . "featured" true) }} */}}
+     用法：{{ partial "post-card.html" (dict "page" . "featured" true "img" $img) }} */}}
 {{ $p := .page }}
 {{ $featured := .featured | default false }}
-{{ $img := "" }}
-{{ with $p.Params.cover }}{{ $img = . }}{{ else }}{{ $img = partial "first-image.html" $p }}{{ end }}
+{{ $img := .img | default "" }}
+{{ if not $img }}
+  {{ with $p.Params.cover }}{{ $img = . }}{{ end }}
+{{ end }}
 {{ $cat := "" }}
 {{ with $p.Params.categories }}{{ $cat = index . 0 }}{{ end }}
 
