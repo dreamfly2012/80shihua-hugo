@@ -643,6 +643,79 @@ button:focus-visible { outline: 3px solid var(--primary); outline-offset: 2px; b
 /* 阅读进度条末端微光 */
 .read-progress { box-shadow: 0 0 10px color-mix(in srgb, var(--primary) 55%, transparent); }
 
+/* ============ 音乐页 ============ */
+.music-page { max-width: 720px; margin: 0 auto; padding: 56px 0 80px; }
+
+.music-hero { text-align: center; margin-bottom: 36px; }
+.music-kicker {
+  color: var(--primary); font-weight: 700; letter-spacing: .14em;
+  text-transform: uppercase; font-size: 12.5px; margin: 0 0 12px;
+}
+.music-title {
+  font-family: var(--font-display); font-weight: 800;
+  font-size: clamp(30px, 5vw, 46px); line-height: 1.15;
+  letter-spacing: -.01em; margin: 0;
+}
+.music-sub {
+  color: var(--fg-muted); font-size: 16px; line-height: 1.7;
+  margin: 14px auto 0; max-width: 30em;
+}
+
+/* 舞台：居中 + 主色柔光 */
+.music-stage { position: relative; display: flex; justify-content: center; }
+.music-stage::before {
+  content: ""; position: absolute; z-index: 0; pointer-events: none;
+  left: 50%; top: 50%; width: 460px; height: 460px; max-width: 130%;
+  transform: translate(-50%, -50%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--primary) 22%, transparent) 0%, transparent 66%);
+  filter: blur(30px); opacity: .9;
+}
+
+/* 播放器卡片：与网易云 iframe（330×450）同宽，圆角裁切 */
+.music-card {
+  position: relative; z-index: 1;
+  width: 360px; max-width: 100%;
+  border-radius: 16px; overflow: hidden;
+  background: #fff; /* 播放器为浅色，固定白底避免深色模式出现断层 */
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg);
+  transition: transform .3s cubic-bezier(.22,.61,.36,1), box-shadow .3s;
+}
+.music-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 50px -18px rgba(15,23,42,.4);
+}
+/* APlayer 融入卡片：去掉其自带边框/阴影，由卡片统一包边 */
+.music-card .aplayer {
+  margin: 0; border: 0; border-radius: 0; box-shadow: none;
+  font-family: var(--font-sans);
+}
+.music-card .aplayer-list::-webkit-scrollbar { width: 6px; }
+.music-card .aplayer-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+.music-note {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: center;
+  gap: 8px 14px; margin: 26px 0 0; text-align: center;
+  color: var(--fg-muted); font-size: 14.5px;
+}
+.music-note__dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--grad); display: inline-block;
+}
+.music-note a { font-weight: 600; text-decoration: none; }
+.music-note a:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+[data-theme="dark"] .music-card {
+  border-color: color-mix(in srgb, var(--primary) 30%, var(--border));
+  box-shadow: 0 26px 60px -20px rgba(0,0,0,.75);
+}
+[data-theme="dark"] .music-stage::before { opacity: .65; }
+
+@media (max-width: 640px) {
+  .music-page { padding: 40px 0 64px; }
+  .music-card { width: 100%; }
+}
+
 /* ============ 响应式 ============ */
 @media (max-width: 860px) {
   .footer-inner { grid-template-columns: 1fr 1fr; gap: 24px; }
