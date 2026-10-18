@@ -62,6 +62,8 @@ jobs:
         run: |
           set -e
           rsync -avzr --delete \
+            --exclude='.user.ini' \
+            --exclude='.well-known/' \
             -e "ssh -p 99 -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
             public/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}/"
         env:
