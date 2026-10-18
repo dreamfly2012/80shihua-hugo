@@ -21,7 +21,7 @@ param(
 $ErrorActionPreference = 'Stop'
 
 # 仓库根目录 = 脚本所在目录（不依赖当前工作目录）
-$repoRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
+$repoRoot = Split-Path -Parent (Split-Path -Parent $MyInvocation.MyCommand.Path)
 $postsDir = Join-Path (Join-Path $repoRoot 'content') 'posts'
 
 if (-not (Test-Path $postsDir)) {
@@ -84,7 +84,7 @@ $OutputEncoding = [System.Text.Encoding]::UTF8
 
 # 预览命令：调用独立的 preview-post.ps1（避免内联 [System.Text...] 触发 PowerShell
 # 对传统命令行解析的回退，从而把 --preview 参数按空格拆碎丢给 fzf 报 unknown option）。
-$previewScript = Join-Path $repoRoot 'preview-post.ps1'
+$previewScript = Join-Path (Split-Path -Parent $MyInvocation.MyCommand.Path) 'preview-post.ps1'
 $preview = "powershell -NoProfile -ExecutionPolicy Bypass -File `"$previewScript`" `"$postsDir`" {1}"
 
 try {

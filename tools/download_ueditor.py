@@ -18,7 +18,7 @@ import time
 import urllib.request
 from urllib.parse import urlsplit, quote, urlunsplit
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTENT = os.path.join(ROOT, "content")
 STATIC_UPLOADS = os.path.join(ROOT, "static", "uploads")          # -> 站点 /uploads/...
 NEW_PREFIX = "/uploads/ueditor/php/upload/"

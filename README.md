@@ -24,7 +24,7 @@
 ```
 80shihua-hugo/
 ├── config.toml          # taxonomy + 精确 permalinks
-├── migrate.py           # WP REST API → Hugo 内容（stdlib，无需 pip）
+├── tools/migrate.py           # WP REST API → Hugo 内容（stdlib，无需 pip）
 ├── hugo_bin/hugo.exe    # 已下载的 Hugo v0.168 extended（仅本地验证用，可不纳入版本库）
 ├── content/
 │   ├── posts/{id}.md    # 842 篇，slug=数字ID，正文保留原始 HTML
@@ -36,7 +36,7 @@
 ## 三、迁移步骤
 ```bash
 # 1. 拉取并生成内容（需能访问 www.80shihua.com）
-python migrate.py
+python tools/migrate.py
 #    → content/posts/*.md + content/*.md（页面）
 
 # 2. 本地预览

@@ -4,7 +4,7 @@ import os, re, json, sys
 from urllib.parse import urlparse
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 POSTS = os.path.join(ROOT, "content", "posts")
 STATIC_UP = os.path.join(ROOT, "static", "uploads")
 

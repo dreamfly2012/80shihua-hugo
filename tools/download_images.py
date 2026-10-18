@@ -27,7 +27,7 @@ def enc_url(u):
     q = quote(p.query, safe="=&")
     return urlunsplit((p.scheme, p.netloc, path, q, p.fragment))
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTENT = os.path.join(ROOT, "content")
 STATIC_UPLOADS = os.path.join(ROOT, "static", "uploads", "wp-content", "uploads")
 NEW_PREFIX = "/uploads/wp-content/uploads/"

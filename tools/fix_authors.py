@@ -9,7 +9,7 @@ import os
 import re
 import glob
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 POSTS = os.path.join(ROOT, "content", "posts")
 CONTENT = os.path.join(ROOT, "content")
 

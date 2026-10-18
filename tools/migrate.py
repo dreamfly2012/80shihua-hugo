@@ -15,7 +15,7 @@ import urllib.request
 from urllib.parse import unquote
 
 BASE = "https://www.80shihua.com/wp-json/wp/v2"
-ROOT = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CONTENT = os.path.join(ROOT, "content")
 POSTS_DIR = os.path.join(CONTENT, "posts")
 

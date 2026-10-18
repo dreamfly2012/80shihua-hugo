@@ -7,7 +7,7 @@ so layout does not collapse and readers get context (the user's "根据内容补
 """
 import os, re, html
 
-ROOT = os.path.dirname(os.path.abspath(__file__))
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 POSTS = os.path.join(ROOT, "content", "posts")
 
 # Curated broken set (verified: source-deleted / 404, 0 false positives)
