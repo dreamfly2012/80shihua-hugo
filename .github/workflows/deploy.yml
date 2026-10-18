@@ -34,20 +34,33 @@ jobs:
       - name: Index with Pagefind
         run: npx -y pagefind --site public
 
-      - name: Deploy via rsync over SSH
+      - name: Prepare SSH key
         run: |
-          set -e
           mkdir -p ~/.ssh
           # 把私钥写入文件（SSH_KEY 是完整的私钥内容）
           printf '%s\n' "${{ secrets.SSH_KEY }}" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          # 预采集 host key（失败不阻断，下面用 StrictHostKeyChecking=no 兜底）
+          # 预采集 host key（失败不阻断，后面用 StrictHostKeyChecking=no 兜底）
           ssh-keyscan -p 99 -H "${{ secrets.SSH_HOST }}" >> ~/.ssh/known_hosts 2>/dev/null || true
           # 校验关键变量是否存在
           if [ -z "${{ secrets.SSH_HOST }}" ] || [ -z "${{ secrets.SSH_USER }}" ] || [ -z "${{ secrets.DEPLOY_PATH }}" ]; then
             echo "::error::SSH_HOST / SSH_USER / DEPLOY_PATH 未设置，请到仓库 Settings → Secrets 填写"
             exit 1
           fi
+
+      - name: Normalize remote perms (best-effort)
+        run: |
+          # 远端 /www/wwwroot/80shihua 可能残留旧 WordPress 文件（属主为 www-data 等），
+          # 导致部署 SSH 用户无法覆盖/删除，rsync 报 code 23。
+          # 这里先把目录属主/权限归一化，best-effort，失败不阻断后续 rsync。
+          ssh -p 99 -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null \
+            "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}" \
+            "sudo chown -R \$(whoami) '${{ secrets.DEPLOY_PATH }}' 2>/dev/null || chown -R \$(whoami) '${{ secrets.DEPLOY_PATH }}' 2>/dev/null; chmod -R u+rwX '${{ secrets.DEPLOY_PATH }}' 2>/dev/null" \
+            || true
+
+      - name: Deploy via rsync over SSH
+        run: |
+          set -e
           rsync -avzr --delete \
             -e "ssh -p 99 -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" \
             public/ "${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_PATH }}/"
