@@ -49,12 +49,10 @@ enableEmoji = true
   includeNewer = true
   threshold = 0
   toLower = true
-  [[related.indices]]
-    name = "categories"
-    weight = 100
+  # 去掉 date：发布时间近 ≠ 主题相关，反而把同月/同年无关文章顶到前面
   [[related.indices]]
     name = "tags"
-    weight = 50
+    weight = 100
   [[related.indices]]
-    name = "date"
-    weight = 10
+    name = "categories"
+    weight = 60

@@ -11,6 +11,7 @@
 .ueditor_urls_cache.txt
 image_scan.log
 image_scan_report.json
+build.log
 
 # ---- Python ----
 __pycache__/
